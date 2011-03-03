@@ -1,7 +1,7 @@
-{
+[{
     "type": "like",
     "args": {
         "property": "Name",
         "value": "Cottage"
     }
-}
+}]

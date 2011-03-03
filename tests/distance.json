@@ -1,4 +1,4 @@
-{
+[{
     "type": "spatial.distance",
     "args": {
         "property": "TheGeom",
@@ -6,4 +6,4 @@
         "distance" : ".1",
         "coords": ["-33.815941 149.324497"]
     }
-}
+}]

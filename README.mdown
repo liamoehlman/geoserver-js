@@ -9,6 +9,26 @@ For the time being GeoServer-js is dependant on [Tile5](https://github.com/sidel
 Currently there are two callable functions in GeoServer-js 
 
 * GEOSERVER.cql
-    * Takes a json file(examples in the tests folder) and returns the query to be added onto cql_filter=
+    * Takes json data (examples in the tests folder) and returns the query to be added onto cql_filter=
 * GEOSERVER.buildRequest
-    * Takes an optional json file and generates the request data to be turned into a query string by jQuery.ajax or something of the like
+    * Takes optional json data along with the required params and generates the request data to be turned into a query string by jQuery.ajax or something of the like
+
+# Additional
+
+Queries can be chained : 
+
+    [{
+        "type": "spatial.bbox",
+        "args": {
+            "property": "TheGeom",
+            "min": "-28.96 138.08",
+            "max": "-10.27 153.59"
+        }
+    },
+    {
+        "type": "like",
+        "args": {
+            "property": "Name",
+            "value": "Cottage"
+        }
+    }]   
