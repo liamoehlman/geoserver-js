@@ -75,7 +75,7 @@ GEOSERVER = (function(){
 		return query;
 	} // cql
 	
-	function buildRequest(params, cqlJson) {
+	function buildRequest(params, cqlJson, callback) {
 		// initialise defaults
 		params = COG.extend({
 			service: 'WFS',
@@ -86,7 +86,7 @@ GEOSERVER = (function(){
 		}, params);
 		
 		/* extra params
-			REQUIRED - dataSet :
+			REQUIRED - typeName :
 			OPTIONAL - propertName :  
 		*/
 		
@@ -96,6 +96,10 @@ GEOSERVER = (function(){
 		
 		if (cqlJson) {
 			params.cql_filter = cql(cqlJson);
+		} // if
+		
+		if (callback) {
+			params.format_options = "callback:"+callback;
 		} // if
 		
 		return params;
