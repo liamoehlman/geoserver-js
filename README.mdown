@@ -7,6 +7,7 @@ For the time being GeoServer-js is dependant on [Tile5](https://github.com/sidel
 # Usage
 
 Currently there are two callable functions in GeoServer-js 
+
 * GEOSERVER.cql
     * Takes a json file(examples in the tests folder) and returns the query to be added onto cql_filter=
 * GEOSERVER.buildRequest
