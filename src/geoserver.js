@@ -74,7 +74,7 @@ GEOSERVER = (function(){
 		} // if...else
 		return query;
 	} // cql
-	
+
 	function buildRequest(params, cqlJson, callback) {
 		// initialise defaults
 		params = COG.extend({
@@ -99,15 +99,25 @@ GEOSERVER = (function(){
 		} // if
 		
 		if (callback) {
-			params.format_options = "callback:"+callback;
+			var callbackId = 'c' + new Date().getTime();
+
+			module.callbacks[callbackId] = function(data) {
+				callback(data);
+				delete module.callbacks[callbackId];
+			}; // temp callback
+			
+			params.format_options = "callback:GEOSERVER.callbacks." + callbackId;
 		} // if
 		
 		return params;
 	
 	} // buildRequest
 	
-	return {
+	var module = {
 		cql: cql,
-		buildRequest: buildRequest
+		buildRequest: buildRequest,
+		callbacks: {}
 	};
+	
+	return module;
 })();
