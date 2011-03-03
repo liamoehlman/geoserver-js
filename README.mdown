@@ -1,5 +1,5 @@
 # About GeoServer-js
 
-GeoServer-js is a toolset designed to be used to make accessing and querying a GeoServer instance much more user friendly.
+GeoServer-js is a toolset designed to make accessing and querying a GeoServer instance much more user friendly.
 
 For the time being GeoServer-js is dependant on [Tile5](https://github.com/sidelab/tile5) 
