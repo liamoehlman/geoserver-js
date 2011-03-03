@@ -1,0 +1,10 @@
+DOESNT WORK IN GEOSERVER
+
+{
+    "type": "spatial.intersect",
+    "args": {
+        "property": "TheGeom",
+        "type": null,
+        "coords": ["x y, x y, x y, x y, x'n, y'n"]
+    }
+}

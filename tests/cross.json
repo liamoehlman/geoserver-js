@@ -1,0 +1,10 @@
+DOESNT WORK IN GEOSERVER
+
+{
+    "type": "spatial.cross",
+    "args": {
+        "property": "TheGeom",
+        "type": "LINESTRING",
+        "coords": ["-33.815941 149.324497","-33.815941 149.324497"]
+    }
+}

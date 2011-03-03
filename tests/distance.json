@@ -1,0 +1,9 @@
+{
+    "type": "spatial.distance",
+    "args": {
+        "property": "TheGeom",
+        "type": "POINT",
+        "distance" : ".1",
+        "coords": ["-33.815941 149.324497"]
+    }
+}
