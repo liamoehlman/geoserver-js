@@ -1,12 +1,12 @@
-GEOSERVER = (function(){
-	
-	// initialise defaults
-	var MAX_POINTS = 5;
-	
+GEOSERVER = (function(){	
 	// initialise module variables
 	var callbackCounter = 1;
 	
-	var CQLParser = function(query) {
+	var CQLParser = function(query, params) {
+		params = COG.extend({
+			maxPoints : 50
+		}, params);
+				
 		var pointsToProcess;
 		
 		function checkType(type, coords) {
@@ -20,7 +20,7 @@ GEOSERVER = (function(){
 		// Adds commas to the linestring except the last point
 		function pointCalc(coords) {
 			var firstElem = coords.length - pointsToProcess,
-				lastElem = Math.min(firstElem + MAX_POINTS, coords.length) - 1;
+				lastElem = Math.min(firstElem + params.maxPoints, coords.length) - 1;
 
 			// decrement the points to process by the last elem
 			pointsToProcess = coords.length - lastElem;
@@ -148,19 +148,18 @@ GEOSERVER = (function(){
 	/* exports */
 
 
-	function buildRequest(params, cqlJson, callback) {
-		
+	function buildRequest(params, cqlJson, callback, maxPoints) {
 		function createTempCallback() {
 			var callbackId = 'cb_' + (callbackCounter++);
-			
+		
 			module.callbacks[callbackId] = function(data) {
 				callback(data);
 				delete module.callbacks[callbackId];
 			}; // temp callback
-			
+		
 			return callbackId;
 		} // createTempCallback
-		
+	
 		console.debug(CQLParser(cqlJson));
 		// initialise defaults
 		params = COG.extend({
@@ -171,37 +170,43 @@ GEOSERVER = (function(){
 			outputFormat: 'json',
 			typeName : null
 		}, params);
-		
+	
 		var cqlQueries = [],
 			queryParams = [],
 			callbackBase = new Date().getTime();
-		
+	
 		/* extra params
 			REQUIRED - typeName :
 			OPTIONAL - propertName :  
 		*/
-		
+	
 		if (params.typeName === null) {
 			console.debug("Dataset not specified");
 		} // if
-		
+	
 		if (cqlJson) {
 			console.debug("cqljson");
-			cqlQueries = CQLParser(cqlJson);
 		
+			if (maxPoints) {
+				console.debug(maxPoints);
+				cqlQueries = CQLParser(cqlJson, {maxPoints : maxPoints});
+			} else {
+				cqlQueries = CQLParser(cqlJson);
+			} // if ... else
+	
 			for (var ii=0; ii < cqlQueries.length; ii++) {
 				queryParams.push(COG.extend({}, params));
 				queryParams[ii].cql_filter = cqlQueries[ii];
 				console.debug(queryParams);
-			
+		
 				if (callback) {
 					queryParams[ii].format_options = "callback:GEOSERVER.callbacks." + createTempCallback(callback);
 				} // if
 			} // for
 		} // if
-		
 	
-/*		
+
+/*	
 		if (callback) {
 			var callbackId = 'c' + new Date().getTime();
 
@@ -209,14 +214,14 @@ GEOSERVER = (function(){
 				callback(data);
 				delete module.callbacks[callbackId];
 			}; // temp callback
-			
+		
 			params.format_options = "callback:GEOSERVER.callbacks." + callbackId;
 		} // if
-*/		
+*/	
 		return queryParams;
-	
+
 	} // buildRequest
-	
+
 	function parseCQL(query) {
 		return CQLParser(query);
 	} // parseCQL
