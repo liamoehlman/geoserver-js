@@ -115,8 +115,9 @@ GEOSERVER = (function(){
 			OPTIONAL - propertName :  
 		*/
 		
-		if (params.dataSet === null) {
+		if (params.typeName === null) {
 			console.debug("Dataset not specified");
+			return false;
 		} // if
 		
 		if (cqlJson) {

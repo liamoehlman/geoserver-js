@@ -179,7 +179,8 @@ var json = {
 	    } // complex 1
 	    ]
 	}]
-}; 
+};
+
 $(document).ready(function(){
 	module("cql_filter tests");
 	
@@ -212,6 +213,7 @@ $(document).ready(function(){
 	test("Complex Queries", function() {
 		equal(GEOSERVER.cql(json.complex[0]), "(Name LIKE '%Cottage%' AND (Name LIKE '%Hotel%' OR BBOX(TheGeom, -28.96, 138.08, -10.27, 153.59) OR (Name LIKE '%Hotel%' OR BBOX(TheGeom, -28.96, 138.08, -10.27, 153.59))))", "Complex stacked query ");
 	});
+
 });
 
 
