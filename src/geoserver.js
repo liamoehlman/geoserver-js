@@ -50,7 +50,7 @@ GEOSERVER = (function(){
 	
 	function like(args) {
 		args = COG.extend({
-			property: 'TheGeom'
+			property: 'Name'
 		}, args);
 		
 	//	var cqlQuery = args.property + " LIKE '%25" + args.value + "%25'"; 
