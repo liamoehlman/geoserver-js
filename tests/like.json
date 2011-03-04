@@ -1,7 +1,9 @@
-[{
-    "type": "like",
-    "args": {
-        "property": "Name",
-        "value": "Cottage"
-    }
-}]
+{
+    conditions: [{
+        "type": "like",
+        "args": {
+            "property": "Name",
+            "value": "Cottage"
+        }
+    }]
+}

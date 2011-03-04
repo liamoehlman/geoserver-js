@@ -1,0 +1,62 @@
+{
+    operator: 'OR',
+    conditions: [{
+        "type": "like",
+        "args": {
+            "property": "Name",
+            "value": "Cottage"
+        }
+    }, {
+        type: 'cql',
+        args: {
+            operator: 'AND',
+            conditions: [{
+                "type": "like",
+                "args": {
+                    "property": "Name",
+                    "value": "Hotel"
+                }
+            }, {
+                "type": "spatial.bbox",
+                "args": {
+                    "property": "TheGeom",
+                    "min": "-28.96 138.08",
+                    "max": "-10.27 153.59"
+                }
+            }]
+        }
+    }
+    ]
+}
+
+{
+    operator: 'AND',
+    conditions: [{
+        "type": "like",
+        "args": {
+            "property": "Name",
+            "value": "Cottage"
+        }
+    }, {
+        type: 'cql',
+        args: {
+            operator: 'OR',
+            conditions: [{
+                "type": "like",
+                "args": {
+                    "property": "Name",
+                    "value": "Hotel"
+                }
+            }, {
+                "type": "spatial.bbox",
+                "args": {
+                    "property": "TheGeom",
+                    "min": "-28.96 138.08",
+                    "max": "-10.27 153.59"
+                }
+            }]
+        }
+    }
+    ]
+}
+

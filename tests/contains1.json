@@ -2,10 +2,8 @@
     conditions: [{
         "type": "spatial.contains",
         "args": {
-            "property": "TheGeom",
             "type": "POINT",
             "coords": ["-33.815941 149.324497"]
         }
     }]
 }
-

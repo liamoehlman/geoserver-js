@@ -2,9 +2,7 @@
     conditions: [{
         "type": "spatial.bbox",
         "args": {
-            "property": "TheGeom",
             "min": "-28.96 138.08",
             "max": "-10.27 153.59"
         }]
 }
-

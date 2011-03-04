@@ -1,11 +1,11 @@
 {
     conditions: [{
-        "type": "spatial.contains",
+        "type": "spatial.distance",
         "args": {
-            "property": "TheGeom",
             "type": "POINT",
+            "distance" : ".05",
+            "unit" : "kilometers"
             "coords": ["-33.815941 149.324497"]
         }
     }]
 }
-
