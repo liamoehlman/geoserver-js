@@ -17,22 +17,38 @@ GEOSERVER = (function(){
 		} // checkType
 		
 		// Adds commas to the linestring except the last point
-		function pointCalc(coords) {
-			var firstElem = coords.length - pointsToProcess,
-				lastElem = Math.min(firstElem + params.maxPoints, coords.length) - 1;
-			
-			// decrement the points to process by the last elem
-			pointsToProcess = coords.length - lastElem;
-			
-			// if the points to process is 1 (due to the last element being one less)
-			// then set to 0, note that the crossover caused by this calculation
-			// is desired given we are subdividing linestrings
-			if (pointsToProcess == 1) {
-				pointsToProcess = 0;
-			} // if
+		function pointCalc(coords, type) {
+			var coordSlice = null,
+			 	typeHandlers = {
+					LINESTRING : function() {
+						var firstElem = coords.length - pointsToProcess,
+							lastElem = Math.min(firstElem + params.maxPoints, coords.length) - 1;
 
-			// return the coordinates for the slice
-			return coords.slice(firstElem, lastElem + 1).join(",");
+						// decrement the points to process by the last elem
+						pointsToProcess = coords.length - lastElem;
+
+						// if the points to process is 1 (due to the last element being one less)
+						// then set to 0, note that the crossover caused by this calculation
+						// is desired given we are subdividing linestrings
+						if (pointsToProcess == 1) {
+							pointsToProcess = 0;
+						} // if
+
+						// return the coordinates for the slice
+						return coords.slice(firstElem, lastElem + 1).join(",");
+					},
+					POINT : function() {
+						return coords;
+					}
+				}; // typeHandlers
+			
+			// execute the correct handler for the point type
+			if (typeHandlers[type]) {
+				coordSlice = typeHandlers[type]();
+			} // if
+			
+			return coordSlice;
+		
 		} // pointCalc
 
 		function bbox(args) {
@@ -62,11 +78,10 @@ GEOSERVER = (function(){
 			// check that the type is ok
 			checkType(args.type, args.coords);
 
-		//	var cqlQuery = "CONTAINS("+args.property+", "+args.type+"("+pointCalc(args.coords)+"))";
 			return COG.formatStr('CONTAINS({0}, {1}({2}))',
 				args.property,
 				args.type,
-				pointCalc(args.coords));
+				pointCalc(args.coords, args.type));
 		} // contains
 
 		function distance(args) {
@@ -80,11 +95,10 @@ GEOSERVER = (function(){
 			// check that the type is ok
 			checkType(args.type, args.coords);
 
-		//	var cqlQuery = "DWITHIN("+args.property+", "+args.type+"("+pointCalc(args.coords)+"), "+args.distance+", kilometers)";	
 			return COG.formatStr('DWITHIN({0}, {1}({2}), {3}, {4})',
 				args.property,
 				args.type,
-				pointCalc(args.coords),
+				pointCalc(args.coords, args.type),
 				args.distance,
 				args.unit);
 		} // distance
@@ -94,7 +108,6 @@ GEOSERVER = (function(){
 				property: 'Name'
 			}, args);
 
-		//	var cqlQuery = args.property + " LIKE '%25" + args.value + "%25'"; 
 			return COG.formatStr("{0} LIKE '%{1}%'",
 				args.property,
 				args.value);
@@ -174,7 +187,7 @@ GEOSERVER = (function(){
 		
 		/* extra params
 			REQUIRED - typeName :
-			OPTIONAL - propertName :  
+			OPTIONAL - propertyName :  
 		*/
 		
 		if (params.typeName === null) {

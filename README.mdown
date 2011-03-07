@@ -8,27 +8,76 @@ For the time being GeoServer-js is dependant on [Tile5](https://github.com/sidel
 
 Currently there are two callable functions in GeoServer-js 
 
-* GEOSERVER.cql
-    * Takes json data (examples in the tests folder) and returns the query to be added onto cql_filter=
-* GEOSERVER.buildRequest
-    * Takes optional json data along with the required params and generates the request data to be turned into a query string by jQuery.ajax or something of the like
+* GEOSERVER.parseCQL(query, params)
+    * Takes the query json and params and returns an array of cql queries
+        * params : {
+            maxPoints :  
+        } 
+        
+* GEOSERVER.buildRequest(params, cqlJson, callback, maxPoints)
+    * Returns an array of objects, each of which is the querystring portion of the geoserver request.
+        * params : {
+            service: 'WFS',
+			version: '1.1.0',
+			request: 'GetFeature',
+			maxFeatures: 200,
+			outputFormat: 'json',
+			typeName : null,
+			propertyName : 
+        }
+        * cqlJson - The json to be transformed into a cql query
+        * callback - The function to handle the returned array
+        * maxPoints - The maximum points that can be in a linestring
 
 # Additional
-
-Queries can be chained : 
-
-    [{
-        "type": "spatial.bbox",
-        "args": {
-            "property": "TheGeom",
-            "min": "-28.96 138.08",
-            "max": "-10.27 153.59"
-        }
-    },
+*Chained query example
     {
-        "type": "like",
-        "args": {
-            "property": "Name",
-            "value": "Cottage"
+        operator: 'AND',
+        conditions: [{
+            "type": "like",
+            "args": {
+                "property": "Name",
+                "value": "Cottage"
+            }
+        }, {
+            type: 'cql',
+            args: {
+                operator: 'OR',
+                conditions: [{
+                    "type": "like",
+                    "args": {
+                        "property": "Name",
+                        "value": "Hotel"
+                    }
+                }, {
+                    "type": "spatial.bbox",
+                    "args": {
+                        "property": "TheGeom",
+                        "min": "-28.96 138.08",
+                        "max": "-10.27 153.59"
+                    }
+                },  {
+                    type: 'cql',
+                    args: {
+                        operator: 'OR',
+                        conditions: [{
+                            "type": "like",
+                            "args": {
+                                "property": "Name",
+                                "value": "Hotel"
+                            }
+                        }, {
+                            "type": "spatial.bbox",
+                            "args": {
+                                "property": "TheGeom",
+                                "min": "-28.96 138.08",
+                                "max": "-10.27 153.59"
+                            }
+                        }]
+                    }
+                    }]
+            }
         }
-    }]   
+        ]
+    }
+
