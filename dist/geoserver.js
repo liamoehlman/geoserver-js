@@ -42,23 +42,23 @@ GEOSERVER = (function(){
 		if (json) {
 
 			if (params.queryType === "ogc") {
-				queryParams.push(COG.extend({}, params));
-				queryParams.push.filter = GEOSERVER.ogc.parseOGC(json);
+				queryParams.push(COG.extend({}, requestParams));
+				queryParams[0].filter = GEOSERVER.ogc.parseOGC(json);
 
 				if (callback) {
-					queryParams[ii].format_options = "callback:GEOSERVER.callbacks." + createTempCallback(callback);
+					queryParams[0].format_options = "callback:GEOSERVER.callbacks." + createTempCallback(callback);
 				} // if
 
 			} else if (params.queryType === "cql") {
 
-				if (maxPoints) {
+				if (params.maxPoints) {
 					queries = GEOSERVER.cql.parseCQL(json, {maxPoints : maxPoints});
 				} else {
 					queries = GEOSERVER.cql.parseCQL(json);
 				} // if ... else
 
 				for (var ii=0; ii < queries.length; ii++) {
-					queryParams.push(COG.extend({}, params));
+					queryParams.push(COG.extend({}, requestParams));
 					queryParams[ii].cql_filter = queries[ii];
 
 					if (callback) {
