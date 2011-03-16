@@ -33,8 +33,8 @@ For the time being GeoServer-js is dependant on [Tile5](https://github.com/sidel
     			maxPoints: undefined
     	}
     	
-    		queryType can either be ogc, which returns an xml-type filter or cql which returns a sql type filter
-    		- If the type is ogc an array of one will be returned, cql can be any length
+    	queryType can either be ogc, which returns an xml-type filter or cql which returns a sql type filter
+    	- If the type is ogc an array of one will be returned, cql can be any length
     		
         * json - The json to be transformed into a cql query
         * callback - The function to handle the returned array
