@@ -229,38 +229,38 @@ $(document).ready(function(){
 	
 	test("bbox tests", function(){
 		expect(2);
-		same(GEOSERVER.parseCQL(json.bbox[0]), ["(BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))"], "bbox1");
-		same(GEOSERVER.parseCQL(json.bbox[1]), ["(BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))"], "bbox2");
+		same(GEOSERVER.cql.parseCQL(json.bbox[0]), ["(BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))"], "bbox1");
+		same(GEOSERVER.cql.parseCQL(json.bbox[1]), ["(BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))"], "bbox2");
 	});
 	
 	test("contains tests", function(){
-		same(GEOSERVER.parseCQL(json.contains[0]), ["(CONTAINS(the_geom, POINT(-33.815941 149.324497)))"], "contains1");
-		same(GEOSERVER.parseCQL(json.contains[1]), ["(CONTAINS(the_geom, POINT(-33.815941 149.324497)))"], "contains2");
-		same(GEOSERVER.parseCQL(json.contains[2]), ["(CONTAINS(the_geom, POINT(-33.815941 149.324497)))"], "contains3");
+		same(GEOSERVER.cql.parseCQL(json.contains[0]), ["(CONTAINS(the_geom, POINT(-33.815941 149.324497)))"], "contains1");
+		same(GEOSERVER.cql.parseCQL(json.contains[1]), ["(CONTAINS(the_geom, POINT(-33.815941 149.324497)))"], "contains2");
+		same(GEOSERVER.cql.parseCQL(json.contains[2]), ["(CONTAINS(the_geom, POINT(-33.815941 149.324497)))"], "contains3");
 	});
 	
 	test("distance tests", function(){
-		same(GEOSERVER.parseCQL(json.distance[0]), ["(DWITHIN(the_geom, LINESTRING(-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497), .05, kilometers))"], "distance - linestring");
-		same(GEOSERVER.parseCQL(json.distance[6]), ["(DWITHIN(the_geom, LINESTRING(-33.815941 149.324497,-33.815941 149.324497), .05, kilometers))"], "distance - linestring");
-		same(GEOSERVER.parseCQL(json.distance[1]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
-		same(GEOSERVER.parseCQL(json.distance[2]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
-		same(GEOSERVER.parseCQL(json.distance[3]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
-		same(GEOSERVER.parseCQL(json.distance[4]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
-		same(GEOSERVER.parseCQL(json.distance[5]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
+		same(GEOSERVER.cql.parseCQL(json.distance[0]), ["(DWITHIN(the_geom, LINESTRING(-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497,-33.815941 149.324497), .05, kilometers))"], "distance - linestring");
+		same(GEOSERVER.cql.parseCQL(json.distance[6]), ["(DWITHIN(the_geom, LINESTRING(-33.815941 149.324497,-33.815941 149.324497), .05, kilometers))"], "distance - linestring");
+		same(GEOSERVER.cql.parseCQL(json.distance[1]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
+		same(GEOSERVER.cql.parseCQL(json.distance[2]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
+		same(GEOSERVER.cql.parseCQL(json.distance[3]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
+		same(GEOSERVER.cql.parseCQL(json.distance[4]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
+		same(GEOSERVER.cql.parseCQL(json.distance[5]), ["(DWITHIN(the_geom, POINT(-33.815941 149.324497), .05, kilometers))"], "distance - point");
 	});
 	
 	test("like tests", function(){
-		same(GEOSERVER.parseCQL(json.like[0]), ["(Name LIKE '%Cottage%')"], "Like");
+		same(GEOSERVER.cql.parseCQL(json.like[0]), ["(Name LIKE '%Cottage%')"], "Like");
 	});
 	
 	test("Complex Queries", function() {
-		same(GEOSERVER.parseCQL(json.complex[0]), ["(Name LIKE '%Cottage%' AND (Name LIKE '%Hotel%' OR BBOX(the_geom, -28.96, 138.08, -10.27, 153.59) OR (Name LIKE '%Hotel%' OR BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))))"], "Complex stacked query ");
+		same(GEOSERVER.cql.parseCQL(json.complex[0]), ["(Name LIKE '%Cottage%' AND (Name LIKE '%Hotel%' OR BBOX(the_geom, -28.96, 138.08, -10.27, 153.59) OR (Name LIKE '%Hotel%' OR BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))))"], "Complex stacked query ");
 	});
 	
 	module("OGC filtering tests");
 	
 	test("distance tests", function(){
-		same(GEOSERVER.ogc.parseOGC(ogcJson.distance[1]), '<ogc:Filter><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:Point srsName="EPSG:4326"><gml:coordinates>-33.815941,149.324497</gml:coordindates></gml:point><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
+		same(GEOSERVER.ogc.parseOGC(ogcJson.distance[1]), '<ogc:Filter xmlns:ogc=\\"http://www.opengis.net/ogc\\" xmlns:gml=\\"http://www.opengis.net/gml><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:Point srsName="EPSG:4326"><gml:coordinates>-33.815941,149.324497</gml:coordindates></gml:point><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
 	});
 	
 });

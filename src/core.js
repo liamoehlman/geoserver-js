@@ -2,7 +2,7 @@ GEOSERVER = (function(){
 	// initialise module variables
 	var callbackCounter = 1;	
 	
-	function buildRequest(params, cqlJson, callback, maxPoints) {
+	function buildRequest(requestParams, params, json, callback)  {
 		function createTempCallback() {
 			var callbackId = 'cb_' + (callbackCounter++);
 			
@@ -15,18 +15,22 @@ GEOSERVER = (function(){
 		} // createTempCallback
 	
 		// initialise defaults
-		params = COG.extend({
+		requestParams = COG.extend({
 			service: 'WFS',
 			version: '1.1.0',
 			request: 'GetFeature',
 			maxFeatures: 20000,
 			outputFormat: 'json',
 			typeName : null
+		}, requestParams);
+		
+		params = COG.extend({
+			queryType: "ogc",
+			maxPoints: undefined
 		}, params);
 		
-		var cqlQueries = [],
-			queryParams = [],
-			callbackBase = new Date().getTime();
+		var queries = [],
+			queryParams = [];
 		
 		/* extra params
 			REQUIRED - typeName :
@@ -37,22 +41,35 @@ GEOSERVER = (function(){
 			console.debug("Dataset not specified");
 		} // if
 		
-		if (cqlJson) {
+		if (json) {
 			
-			if (maxPoints) {
-				cqlQueries = CQLParser(cqlJson, {maxPoints : maxPoints});
-			} else {
-				cqlQueries = CQLParser(cqlJson);
-			} // if ... else
-		
-			for (var ii=0; ii < cqlQueries.length; ii++) {
+			if (params.queryType === "ogc") {
 				queryParams.push(COG.extend({}, params));
-				queryParams[ii].cql_filter = cqlQueries[ii];
-
+				queryParams.push.filter = GEOSERVER.ogc.parseOGC(json);
+				
 				if (callback) {
 					queryParams[ii].format_options = "callback:GEOSERVER.callbacks." + createTempCallback(callback);
 				} // if
-			} // for
+								
+			} else if (params.queryType === "cql") {
+			
+				if (maxPoints) {
+					queries = GEOSERVER.cql.parseCQL(json, {maxPoints : maxPoints});
+				} else {
+					queries = GEOSERVER.cql.parseCQL(json);
+				} // if ... else
+							
+				for (var ii=0; ii < queries.length; ii++) {
+					queryParams.push(COG.extend({}, params));
+					queryParams[ii].cql_filter = queries[ii];
+
+					if (callback) {
+						queryParams[ii].format_options = "callback:GEOSERVER.callbacks." + createTempCallback(callback);
+					} // if
+				} // for
+			} else {
+				console.debug("Invalid query type");
+			} // if...else
 		} // if
 	
 		return queryParams;

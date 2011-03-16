@@ -154,8 +154,8 @@ GEOSERVER.cql = (function(){
 		return cqlStrings;
 	}; // CQLParser
 	
-	function parseCQL(query) {
-		return CQLParser(query);
+	function parseCQL(query, params) {
+		return CQLParser(query, params);
 	} // parseCQL
 	
 	var module = {

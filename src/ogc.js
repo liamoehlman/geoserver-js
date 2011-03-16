@@ -53,7 +53,7 @@ GEOSERVER.ogc = (function() {
 			}, args);
 
 			var queryElems = [];
-			console.debug(args.conditions.length);
+
 			for (var ii = 0; ii < args.conditions.length; ii++) {
 				var condition = args.conditions[ii],
 					handler = null;
