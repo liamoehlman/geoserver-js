@@ -13,8 +13,8 @@ For the time being GeoServer-js is dependant on [Tile5](https://github.com/sidel
         }
 
 * GEOSERVER.ogc.parseOGC(query)
-    * Takes the query json and returns an array with a single value containing the data to be handed off to an ajax request and made into a query string
-        
+    * Takes the query json and returns an array with a single value which is the ogc filter
+    
 * GEOSERVER.buildRequest(requestParams, params, json, callback)
     * Returns an array of objects, each of which is the querystring portion of the geoserver request.
         * requestParams : {
@@ -32,7 +32,9 @@ For the time being GeoServer-js is dependant on [Tile5](https://github.com/sidel
             	queryType: "ogc",
     			maxPoints: undefined
     	}
+    	
     		queryType can either be ogc, which returns an xml-type filter or cql which returns a sql type filter
+    		- If the type is ogc an array of one will be returned, cql can be any length
     		
         * json - The json to be transformed into a cql query
         * callback - The function to handle the returned array
