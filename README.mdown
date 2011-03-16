@@ -9,7 +9,7 @@ For the time being GeoServer-js is dependant on [Tile5](https://github.com/sidel
 * GEOSERVER.cql.parseCQL(query, params)
     * Takes the query json and params and returns an array of cql queries
         * params : {
-            maxPoints : 50  
+                maxPoints : 50  
         }
 
 * GEOSERVER.ogc.parseOGC(query)
