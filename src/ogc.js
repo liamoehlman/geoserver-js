@@ -6,7 +6,6 @@ GEOSERVER.ogc = (function() {
 		}, params);
 		
 		function dwithin(args) {
-			console.debug("dwithin running");
 			args = COG.extend({
 				property: 'the_geom',
 				type: 'POINT',
@@ -33,6 +32,19 @@ GEOSERVER.ogc = (function() {
 		
 			return filter;
 		} // dwithin
+
+		function like(args) {
+			args = COG.extend({
+				property: null,
+				value : null
+			}, args);
+			
+			var propertyName = '<ogc:PropertyName>'+args.property+'</ogc:PropertyName>',
+				searchName = '<ogc:Literal>*'+args.value+'*</ogc:Literal>',
+				filter = '<ogc:PropertyIsLike wildCard="*" singleChar="?" escapeChar="\\">'+propertyName + searchName +'</ogc:PropertyIsLike>';
+				
+			return filter;
+		} // like
 			
 		function ogc(args) {
 			args = COG.extend({
@@ -67,18 +79,19 @@ GEOSERVER.ogc = (function() {
 	
 		var queryHandlers = {
 			'spatial.distance' : dwithin,
+			'like' : like,
 			ogc: ogc
 		};
 		
 		var ogcFilter = ogc(query);
 		
-		return '<ogc:Filter>'+ogcFilter+'</ogc:Filter>';
+		return '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml>'+ogcFilter+'</ogc:Filter>';
 		
 	}; // ogcParser
 	
 	function parseOGC(query) {
 		return ogcParser(query);
-	}
+	} // parseOGC
 	
 	var module = {
 		parseOGC : parseOGC
