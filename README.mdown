@@ -30,7 +30,9 @@ Currently there are two callable functions in GeoServer-js
         * maxPoints - The maximum points that can be in a linestring
 
 # Additional
-*Chained query example
+
+Chained query example
+
     {
         operator: 'AND',
         conditions: [{
