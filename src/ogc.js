@@ -1,9 +1,33 @@
 GEOSERVER.ogc = (function() {
 	
+	function formatCoords(coords) {
+		var regexp = /([\-,0-9,\.]+)\s([\-,0-9,\.]+)/;
+		coords.forEach(function(value, index, array) {
+			coords[index] = coords[index].replace(regexp, "$2,$1");
+		});
+		
+		return coords;
+	}
+	
 	var ogcParser = function(query, params) {
 		params = COG.extend({
 			// for future needs
 		}, params);
+		
+		function bbox(args) {
+			args = COG.extend({
+				property: 'the_geom',
+				min: '-90 -180',
+				max: '90 180',
+				srs : 'EPSG:4326'
+			}, args);
+			
+			var propertyName = '<ogc:PropertyName>'+args.property+'</ogc:PropertyName>',
+				envelope = '<gml:Envelope srsName="'+args.srs+'"><gml:lowerCorner>'+args.min+'</gml:lowerCorner><gml:upperCorner>'+args.max+'</gml:upperCorner></gml:Envelope>',
+				filter = '<ogc:BBOX>'+propertyName + envelope +'</ogc:BBOX>';
+			
+			return filter;
+		}
 		
 		function dwithin(args) {
 			args = COG.extend({
@@ -19,12 +43,12 @@ GEOSERVER.ogc = (function() {
 				propertyName = '<ogc:PropertyName>'+args.property+'</ogc:PropertyName>',
 				pointCoords,
 				filter;
-			
+				
 			if (args.type === 'POINT') {
-				pointCoords = '<gml:Point srsName="'+args.srs+'"><gml:coordinates>'+args.coords+'</gml:coordindates></gml:point>';
+				pointCoords = '<gml:Point srsName="'+args.srs+'"><gml:coordinates>'+formatCoords(args.coords)+'</gml:coordindates></gml:point>';
 			} 
 			else if (args.type === 'LINESTRING') {
-				pointCoords = '<gml:LineString '+args.srs+'><gml:coordinates>'+args.coords.join(' ')+'</gml:coordindates></gml:LineString>';
+				pointCoords = '<gml:LineString srsName="'+args.srs+'"><gml:coordinates>'+formatCoords(args.coords).join(' ')+'</gml:coordinates></gml:LineString>';
 			} // if...elseif
 		
 			// create the Dwithin portion of the filter
@@ -68,10 +92,10 @@ GEOSERVER.ogc = (function() {
 				} // if
 			} // for
 			
-			if (args.operator) {
+			if (args.operator !== null) {
 				return '<'+args.operator+'>' + queryElems.join('') + '</'+args.operator+'>';
 			} else {
-				return queryElems.join("");
+				return queryElems.join('');
 			}
 		} // ogc
 
@@ -79,13 +103,14 @@ GEOSERVER.ogc = (function() {
 	
 		var queryHandlers = {
 			'spatial.distance' : dwithin,
+			'spatial.bbox' : bbox,
 			'like' : like,
-			ogc: ogc
+			compound: ogc
 		};
 		
 		var ogcFilter = ogc(query);
 		
-		return '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml>'+ogcFilter+'</ogc:Filter>';
+		return '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">'+ogcFilter+'</ogc:Filter>';
 		
 	}; // ogcParser
 	

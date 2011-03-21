@@ -142,7 +142,7 @@ GEOSERVER.cql = (function(){
 			'spatial.contains' : contains,
 			'spatial.distance' : distance,
 			like  : like,
-			cql: cql
+			compound: cql
 		};
 		
 		var cqlStrings = [cql(query)];

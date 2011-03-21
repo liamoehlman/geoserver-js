@@ -141,7 +141,7 @@ var json = {
 	            "value": "Cottage"
 	        }
 	    }, {
-	        type: 'cql',
+	        type: 'compound',
 	        args: {
 	            operator: 'OR',
 	            conditions: [{
@@ -158,7 +158,7 @@ var json = {
 	                    "max": "-10.27 153.59"
 	                }
 	            },  {
-	                type: 'cql',
+	                type: 'compound',
 	                args: {
 	                    operator: 'OR',
 	                    conditions: [{
@@ -195,35 +195,6 @@ var json = {
 	]
 };
 
-var ogcJson = {
-	distance : [
-	{
-	    conditions: [{
-	        "type": "spatial.distance",
-	        "args": {
-	            "property": "the_geom",
-	            "type": "LINESTRING",
-	            "distance" : ".05",
-	            "unit": 'kilometers',
-	            "coords": ["-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497","-33.815941 149.324497"]
-	        }
-	    }]
-	}, //0
-	{
-	    conditions: [{
-	        "type": "spatial.distance",
-	        "args": {
-	            "property": "the_geom",
-	            "type": "POINT",
-	            "distance" : ".05",
-	            "unit": 'kilometers',
-	            "coords": ["-33.815941,149.324497"]
-	        }
-	    }]
-	}] //1
-};
-
-
 $(document).ready(function(){
 	module("cql_filter tests");
 	
@@ -259,8 +230,24 @@ $(document).ready(function(){
 	
 	module("OGC filtering tests");
 	
+	test("bbox tests", function(){
+		expect(2);
+		same(GEOSERVER.ogc.parseOGC(json.bbox[0]), ["(BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))"], "bbox1");
+		same(GEOSERVER.ogc.parseOGC(json.bbox[1]), ["(BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))"], "bbox2");
+	});
+	
 	test("distance tests", function(){
-		same(GEOSERVER.ogc.parseOGC(ogcJson.distance[1]), '<ogc:Filter xmlns:ogc=\\"http://www.opengis.net/ogc\\" xmlns:gml=\\"http://www.opengis.net/gml><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:Point srsName="EPSG:4326"><gml:coordinates>-33.815941,149.324497</gml:coordindates></gml:point><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
+		same(GEOSERVER.ogc.parseOGC(json.distance[0]), '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:LineString EPSG:4326><gml:coordinates>-33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497</gml:coordindates></gml:LineString><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
+		same(GEOSERVER.ogc.parseOGC(json.distance[6]), '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:LineString EPSG:4326><gml:coordinates>-33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497</gml:coordindates></gml:LineString><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
+		same(GEOSERVER.ogc.parseOGC(json.distance[1]), '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:LineString EPSG:4326><gml:coordinates>-33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497</gml:coordindates></gml:LineString><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
+		same(GEOSERVER.ogc.parseOGC(json.distance[2]), '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:LineString EPSG:4326><gml:coordinates>-33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497</gml:coordindates></gml:LineString><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
+		same(GEOSERVER.ogc.parseOGC(json.distance[3]), '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:LineString EPSG:4326><gml:coordinates>-33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497</gml:coordindates></gml:LineString><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
+		same(GEOSERVER.ogc.parseOGC(json.distance[4]), '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:LineString EPSG:4326><gml:coordinates>-33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497</gml:coordindates></gml:LineString><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
+		same(GEOSERVER.ogc.parseOGC(json.distance[5]), '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:LineString EPSG:4326><gml:coordinates>-33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497</gml:coordindates></gml:LineString><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
+	});
+	
+	test("Complex Queries", function() {
+		same(GEOSERVER.ogc.parseOGC(json.complex[0]), ["(Name LIKE '%Cottage%' AND (Name LIKE '%Hotel%' OR BBOX(the_geom, -28.96, 138.08, -10.27, 153.59) OR (Name LIKE '%Hotel%' OR BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))))"], "Complex stacked query ");
 	});
 	
 });
