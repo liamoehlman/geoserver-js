@@ -18,7 +18,7 @@ GEOSERVER = (function(){
 			version: '1.1.0',
 			request: 'GetFeature',
 			maxFeatures: 20000,
-			outputFormat: 'json',
+			outputFormat: 'GML2',
 			typeName : null
 		}, requestParams);
 
@@ -49,10 +49,12 @@ GEOSERVER = (function(){
 					queryParams[0].format_options = "callback:GEOSERVER.callbacks." + createTempCallback(callback);
 				} // if
 
+				return queryParams;
+
 			} else if (params.queryType === "cql") {
 
 				if (params.maxPoints) {
-					queries = GEOSERVER.cql.parseCQL(json, {maxPoints : maxPoints});
+					queries = GEOSERVER.cql.parseCQL(json, {maxPoints : params.maxPoints});
 				} else {
 					queries = GEOSERVER.cql.parseCQL(json);
 				} // if ... else
@@ -65,12 +67,18 @@ GEOSERVER = (function(){
 						queryParams[ii].format_options = "callback:GEOSERVER.callbacks." + createTempCallback(callback);
 					} // if
 				} // for
+
+				return queryParams;
+
 			} else {
 				console.debug("Invalid query type");
 			} // if...else
 		} // if
 
-		return queryParams;
+		if (callback) {
+			requestParams.format_options = "callback:GEOSERVER.callbacks." + createTempCallback(callback);
+		}
+		return requestParams;
 
 	} // buildRequest
 
