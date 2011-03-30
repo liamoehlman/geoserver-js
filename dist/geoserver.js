@@ -17,8 +17,8 @@ GEOSERVER = (function(){
 			service: 'WFS',
 			version: '1.1.0',
 			request: 'GetFeature',
-			maxFeatures: 20000,
-			outputFormat: 'GML2',
+			maxFeatures: 200,
+			outputFormat: 'GML3',
 			typeName : null
 		}, requestParams);
 

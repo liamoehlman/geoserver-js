@@ -236,6 +236,10 @@ $(document).ready(function(){
 		same(GEOSERVER.ogc.parseOGC(json.bbox[1]), ["(BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))"], "bbox2");
 	});
 	
+	test("like tests", function(){
+		same(GEOSERVER.ogc.parseOGC(json.like[0]), "", "Like");
+	});
+	
 	test("distance tests", function(){
 		same(GEOSERVER.ogc.parseOGC(json.distance[0]), '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:LineString EPSG:4326><gml:coordinates>-33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497</gml:coordindates></gml:LineString><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
 		same(GEOSERVER.ogc.parseOGC(json.distance[6]), '<ogc:Filter xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml"><ogc:DWithin><ogc:PropertyName>the_geom</ogc:PropertyName><gml:LineString EPSG:4326><gml:coordinates>-33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497 -33.815941,149.324497</gml:coordindates></gml:LineString><ogc:Distance units="kilometers">.05</ogc:Distance></ogc:DWithin></ogc:Filter>', "OGC - Distance");
