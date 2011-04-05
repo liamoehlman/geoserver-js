@@ -44,52 +44,52 @@ For the time being GeoServer-js is dependant on [Tile5](https://github.com/sidel
 Chained query example
 
     {
-        operator: 'AND',
-        conditions: [{
-            "type": "like",
-            "args": {
-                "property": "Name",
-                "value": "Cottage"
-            }
-        }, {
-            type: 'cql',
-            args: {
-                operator: 'OR',
-                conditions: [{
-                    "type": "like",
-                    "args": {
-                        "property": "Name",
-                        "value": "Hotel"
-                    }
-                }, {
-                    "type": "spatial.bbox",
-                    "args": {
-                        "property": "TheGeom",
-                        "min": "-28.96 138.08",
-                        "max": "-10.27 153.59"
-                    }
-                },  {
-                    type: 'cql',
-                    args: {
-                        operator: 'OR',
-                        conditions: [{
-                            "type": "like",
-                            "args": {
-                                "property": "Name",
-                                "value": "Hotel"
-                            }
-                        }, {
-                            "type": "spatial.bbox",
-                            "args": {
-                                "property": "TheGeom",
-                                "min": "-28.96 138.08",
-                                "max": "-10.27 153.59"
-                            }
-                        }]
-                    }
-                    }]
-            }
-        }
-        ]
-    }
+	    operator: 'AND',
+	    conditions: [{
+	        "type": "like",
+	        "args": {
+	            "property": "Name",
+	            "value": "Cottage"
+	        }
+	    }, {
+	        type: 'compound',
+	        args: {
+	            operator: 'OR',
+	            conditions: [{
+	                "type": "like",
+	                "args": {
+	                    "property": "Name",
+	                    "value": "Hotel"
+	                }
+	            }, {
+	                "type": "spatial.bbox",
+	                "args": {
+	                    "property": "the_geom",
+	                    "min": "-28.96 138.08",
+	                    "max": "-10.27 153.59"
+	                }
+	            },  {
+	                type: 'compound',
+	                args: {
+	                    operator: 'OR',
+	                    conditions: [{
+	                        "type": "like",
+	                        "args": {
+	                            "property": "Name",
+	                            "value": "Hotel"
+	                        }
+	                    }, {
+	                        "type": "spatial.bbox",
+	                        "args": {
+	                            "property": "the_geom",
+	                            "min": "-28.96 138.08",
+	                            "max": "-10.27 153.59"
+	                        }
+	                    }]
+	                }
+				}]
+	        }
+	    }
+	    
+This returns the following : (Name LIKE '%Cottage%' AND (Name LIKE '%Hotel%' OR BBOX(the_geom, -28.96, 138.08, -10.27, 153.59) OR (Name LIKE '%Hotel%' OR BBOX(the_geom, -28.96, 138.08, -10.27, 153.59))))
 
