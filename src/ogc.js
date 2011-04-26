@@ -10,12 +10,12 @@ GEOSERVER.ogc = (function() {
 	}
 	
 	var ogcParser = function(query, params) {
-		params = COG.extend({
+		params = T5.ex({
 			// for future needs
 		}, params);
 		
 		function bbox(args) {
-			args = COG.extend({
+			args = T5.ex({
 				property: 'the_geom',
 				min: '-90 -180',
 				max: '90 180',
@@ -30,7 +30,7 @@ GEOSERVER.ogc = (function() {
 		}
 		
 		function dwithin(args) {
-			args = COG.extend({
+			args = T5.ex({
 				property: 'the_geom',
 				type: 'POINT',
 				distance: '.05',
@@ -58,7 +58,7 @@ GEOSERVER.ogc = (function() {
 		} // dwithin
 
 		function like(args) {
-			args = COG.extend({
+			args = T5.ex({
 				property: null,
 				value : null
 			}, args);
@@ -71,7 +71,7 @@ GEOSERVER.ogc = (function() {
 		} // like
 			
 		function ogc(args) {
-			args = COG.extend({
+			args = T5.ex({
 				operator: null,
 				conditions: []
 			}, args);

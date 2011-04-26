@@ -1,11 +1,16 @@
 GEOSERVER.cql = (function(){
-	
+	var bboxFormatter = T5.formatter('BBOX({0}, {1}, {2}, {3}, {4})'),
+		containsFormatter = T5.formatter('CONTAINS({0}, {1}({2}))'),
+		distanceFormatter = T5.formatter('DWITHIN({0}, {1}({2}), {3}, {4})'),
+		likeFormatter = T5.formatter("{0} LIKE '%{1}%'");
+		
 	var CQLParser = function(query, params) {
-		params = COG.extend({
+		params = T5.ex({
 			maxPoints : 50
 		}, params);
 				
 		var pointsToProcess;
+		
 		
 		function checkType(type, coords) {
 		// perform some basic checks on the data			
@@ -50,16 +55,16 @@ GEOSERVER.cql = (function(){
 		} // pointCalc
 
 		function bbox(args) {
-			args = COG.extend({
+			args = T5.ex({
 				property: 'the_geom',
 				min: '-90 -180',
 				max: '90 180'
 			}, args);
 
-			var min = T5.Geo.Position.parse(args.min),
-				max = T5.Geo.Position.parse(args.max);
+			var min = new T5.Pos(args.min),
+				max = new T5.Pos(args.max);
 
-			return COG.formatStr('BBOX({0}, {1}, {2}, {3}, {4})',
+			return bboxFormatter(
 				args.property,
 				min.lat,
 				min.lon,
@@ -68,7 +73,7 @@ GEOSERVER.cql = (function(){
 		} // bbox
 
 		function contains(args) {
-			args = COG.extend({
+			args = T5.ex({
 				property: 'the_geom',
 				type: 'POINT'
 			}, args);
@@ -76,14 +81,14 @@ GEOSERVER.cql = (function(){
 			// check that the type is ok
 			checkType(args.type, args.coords);
 
-			return COG.formatStr('CONTAINS({0}, {1}({2}))',
+			return containsFormatter(
 				args.property,
 				args.type,
 				pointCalc(args.coords, args.type));
 		} // contains
 
 		function distance(args) {
-			args = COG.extend({
+			args = T5.ex({
 				property: 'the_geom',
 				type: 'POINT',
 				distance: '.05',
@@ -93,7 +98,7 @@ GEOSERVER.cql = (function(){
 			// check that the type is ok
 			checkType(args.type, args.coords);
 
-			return COG.formatStr('DWITHIN({0}, {1}({2}), {3}, {4})',
+			return distanceFormatter(
 				args.property,
 				args.type,
 				pointCalc(args.coords, args.type),
@@ -102,17 +107,17 @@ GEOSERVER.cql = (function(){
 		} // distance
 
 		function like(args) {
-			args = COG.extend({
+			args = T5.ex({
 				property: 'Name'
 			}, args);
 
-			return COG.formatStr("{0} LIKE '%{1}%'",
+			return likeFormatter(
 				args.property,
 				args.value);
 		} // like
 
 		function cql(args) {
-			args = COG.extend({
+			args = T5.ex({
 				operator: 'AND',
 				conditions: []
 			}, args);
