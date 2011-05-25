@@ -145,8 +145,8 @@ GEOSERVER.cql = (function(){
 				max: '90 180'
 			}, args);
 
-			var min = new T5.Pos(args.min),
-				max = new T5.Pos(args.max);
+			var min = new GeoJS.Pos(args.min),
+				max = new GeoJS.Pos(args.max);
 
 			return bboxFormatter(
 				args.property,
